@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KannanStore | Shop Smarter</title>
+    <meta name="description" content="Discover your favourite products at KannanStore.">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <a href="#" class="logo">
+            <span class="logo-icon">K</span>
+            Kannan<span class="logo-highlight">Store</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#products">Products</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div id="auth-nav-container">
+                <!-- Logged Out View -->
+                <button class="outline-button auth-nav-btn" id="open-auth-btn" type="button">
+                    👤 Sign In
+                </button>
+                <!-- Logged In View -->
+                <div class="user-pill" id="user-profile-badge" hidden>
+                    <span class="user-greeting" id="nav-user-greeting">Hi, Shopper</span>
+                    <button class="logout-link" id="logout-btn" type="button" title="Sign Out">Sign Out</button>
+                </div>
+            </div>
+
+            <button class="cart-toggle" id="cart-toggle" type="button">
+                🛒 Cart <span id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <span class="eyebrow">✦ YOUR NEXT FAVOURITE</span>
+                <h1>Shop Smarter.<br>
+                    <span>Live Better.</span>
+                </h1>
+                <p>
+                    Discover products you'll love, all in one place.
+                    Quality picks for your everyday life.
+                </p>
+                <a href="#products" class="primary-link">
+                    Explore Products <span>→</span>
+                </a>
+            </div>
+
+            <div class="hero-visual" aria-label="Shopping illustration">
+                <div class="hero-circle"></div>
+                <div class="hero-bag">🛍️</div>
+                <div class="floating-card floating-card-one">
+                    ✨ Great choices
+                </div>
+                <div class="floating-card floating-card-two">
+                    💜 Shop your style
+                </div>
+            </div>
+        </section>
+
+        <!-- Products section -->
+        <section class="products-section" id="products">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">OUR COLLECTION</span>
+                    <h2>Featured Products</h2>
+                    <p>Find something you'll love.</p>
+                </div>
+                <span class="product-count" id="product-count">
+                    3 products found
+                </span>
+            </div>
+
+            <!-- Search and filter -->
+            <div class="filter-bar">
+                <div class="search-box">
+                    <span>⌕</span>
+                    <input
+                        type="search"
+                        id="search-input"
+                        placeholder="Search products..."
+                        aria-label="Search products"
+                    >
+                </div>
+
+                <select id="category-filter" aria-label="Filter by category">
+                    <option value="all">All Categories</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+
+                <button id="clear-filters" class="outline-button" type="button">
+                    Clear Filters
+                </button>
+            </div>
+
+            <!-- Loading message while fetching from MongoDB Atlas -->
+            <div class="feedback-state" id="loading-state" role="status">
+                <div class="spinner"></div>
+                <p>Connecting to database & loading products...</p>
+            </div>
+
+            <!-- Error message if backend is unreachable -->
+            <div class="feedback-state error-state" id="error-state" role="alert" hidden>
+                <div class="error-icon">⚠️</div>
+                <h3>Unable to load products</h3>
+                <p id="error-message">Could not connect to KannanStore backend at http://localhost:3000.</p>
+                <button class="primary-button" id="retry-button" type="button">
+                    ↻ Try Again
+                </button>
+            </div>
+
+            <!-- JavaScript displays product cards here -->
+            <div class="product-grid" id="product-grid" hidden></div>
+
+            <div class="empty-state" id="empty-state" hidden>
+                <div class="empty-icon">🔎</div>
+                <h3>No products found</h3>
+                <p>Try another search or clear your filters.</p>
+                <button class="primary-button" id="empty-clear" type="button">
+                    Show All Products
+                </button>
+            </div>
+        </section>
+
+        <!-- Shopping cart -->
+        <section class="cart-section" id="cart-section">
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">YOUR SELECTION</span>
+                    <h2>Your Shopping Cart</h2>
+                    <p>Review your selected products.</p>
+                </div>
+            </div>
+
+            <div class="cart-panel">
+                <div id="cart-items" class="cart-items">
+                    <p class="cart-empty">Your cart is empty. 💜</p>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Total items</span>
+                        <strong id="summary-count">0</strong>
+                    </div>
+                    <div class="summary-row total-row">
+                        <span>Total amount</span>
+                        <strong id="cart-total">₹0</strong>
+                    </div>
+                    <button id="checkout-button" class="primary-button checkout-button"
+                        type="button" disabled>
+                        Proceed to Checkout →
+                    </button>
+                    <p class="checkout-note">
+                        Demo project — no real payment will be processed.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About section -->
+        <section class="about-section" id="about">
+            <span class="eyebrow">ABOUT OUR STORE</span>
+            <h2>A simple, smarter shopping experience.</h2>
+            <p>
+                KannanStore is a student-built e-commerce project designed
+                to make browsing products and managing a shopping cart easy.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <a href="#home" class="footer-logo">KannanStore 💜</a>
+        <p>Built with HTML, CSS and JavaScript.</p>
+        <p>© 2026 KannanStore. Student project.</p>
+    </footer>
+
+    <!-- Message area for screen readers -->
+    <p id="status-message" class="visually-hidden" aria-live="polite"></p>
+
+    <!-- Checkout Modal Dialog -->
+    <div class="modal-backdrop" id="checkout-modal" aria-hidden="true" role="dialog" aria-labelledby="checkout-modal-title">
+        <div class="modal-card">
+            <button class="modal-close" id="close-checkout-modal" type="button" aria-label="Close checkout modal">✕</button>
+
+            <!-- Form State -->
+            <div id="checkout-form-container">
+                <div class="modal-header">
+                    <span class="eyebrow">✦ DEMO CHECKOUT</span>
+                    <h2 id="checkout-modal-title">Complete Your Order 🛍️</h2>
+                    <p class="modal-subtitle">Enter your shipping details below. No real payment or card required.</p>
+                </div>
+
+                <div class="checkout-order-summary">
+                    <div class="summary-line">
+                        <span>Items in Order:</span>
+                        <strong id="modal-order-items-count">0</strong>
+                    </div>
+                    <div class="summary-line highlight-total">
+                        <span>Estimated Total:</span>
+                        <strong id="modal-order-total">₹0</strong>
+                    </div>
+                </div>
+
+                <form id="checkout-form" novalidate>
+                    <div class="form-group">
+                        <label for="customer-name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="customer-name" name="name" placeholder="e.g. Kannan G" required autocomplete="name">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customer-email">Email Address <span class="required">*</span></label>
+                            <input type="email" id="customer-email" name="email" placeholder="kannan@example.com" required autocomplete="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-phone">Phone Number <span class="required">*</span></label>
+                            <input type="tel" id="customer-phone" name="phone" placeholder="9876543210" required autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customer-address">Delivery Address <span class="required">*</span></label>
+                        <textarea id="customer-address" name="address" rows="2" placeholder="Street name, Apartment/House No, City, Pincode" required autocomplete="street-address"></textarea>
+                    </div>
+
+                    <div class="form-error" id="checkout-error" role="alert" hidden></div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="outline-button" id="cancel-checkout-button">Cancel</button>
+                        <button type="submit" class="primary-button" id="place-order-button">
+                            <span id="place-order-text">Confirm & Place Order</span>
+                            <span id="place-order-spinner" class="inline-spinner" hidden></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Success State -->
+            <div id="checkout-success-container" hidden>
+                <div class="success-icon-badge">🎉</div>
+                <div class="modal-header">
+                    <span class="eyebrow">ORDER CONFIRMED</span>
+                    <h2>Thank You for Your Order!</h2>
+                    <p class="modal-subtitle">Your order has been verified and saved securely in MongoDB.</p>
+                </div>
+
+                <div class="success-details-card">
+                    <div class="detail-row">
+                        <span class="detail-label">Order ID</span>
+                        <code class="order-id-badge" id="success-order-id">#</code>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Customer</span>
+                        <strong id="success-customer-name">-</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Total Verified Amount</span>
+                        <strong class="success-total" id="success-order-total">₹0</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Status</span>
+                        <span class="status-pill">✓ Confirmed</span>
+                    </div>
+                    <div class="detail-items-list" id="success-items-list"></div>
+                </div>
+
+                <button type="button" class="primary-button full-width" id="continue-shopping-button">
+                    Continue Shopping →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Sign In / Register) -->
+    <div class="modal-backdrop" id="auth-modal" aria-hidden="true" role="dialog" aria-labelledby="auth-modal-title">
+        <div class="modal-card auth-modal-card">
+            <button class="modal-close" id="close-auth-modal" type="button" aria-label="Close authentication modal">✕</button>
+
+            <!-- Auth Mode Switcher Tabs -->
+            <div class="auth-tabs" role="tablist">
+                <button class="auth-tab active" id="tab-login" type="button" role="tab" aria-selected="true" aria-controls="login-form-view">
+                    Sign In
+                </button>
+                <button class="auth-tab" id="tab-register" type="button" role="tab" aria-selected="false" aria-controls="register-form-view">
+                    Create Account
+                </button>
+            </div>
+
+            <!-- 1. SIGN IN FORM -->
+            <div id="login-form-view" role="tabpanel" aria-labelledby="tab-login">
+                <div class="modal-header">
+                    <span class="eyebrow">✦ WELCOME BACK</span>
+                    <h2 id="auth-modal-title">Sign in to KannanStore</h2>
+                    <p class="modal-subtitle">Access your account, saved preferences, and express checkout.</p>
+                </div>
+
+                <div class="form-error" id="login-error" role="alert" hidden></div>
+
+                <form id="login-form" novalidate>
+                    <div class="form-group">
+                        <label for="login-email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="login-email" name="email" placeholder="name@example.com" required autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Password <span class="required">*</span></label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="login-password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                            <button type="button" class="password-toggle-btn" id="toggle-login-password" aria-label="Show password" aria-pressed="false" title="Show password">
+                                <span class="eye-icon" aria-hidden="true">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="primary-button full-width" id="login-submit-btn">
+                        <span id="login-btn-text">Sign In →</span>
+                        <span id="login-btn-spinner" class="inline-spinner" hidden></span>
+                    </button>
+                </form>
+
+                <div class="auth-switch-note">
+                    Don't have an account? <button type="button" class="text-link" id="switch-to-register">Create an account</button>
+                </div>
+            </div>
+
+            <!-- 2. REGISTER FORM -->
+            <div id="register-form-view" role="tabpanel" aria-labelledby="tab-register" hidden>
+                <div class="modal-header">
+                    <span class="eyebrow">✦ JOIN KANNANSTORE</span>
+                    <h2>Create your account</h2>
+                    <p class="modal-subtitle">Enjoy a faster checkout and account order tracking.</p>
+                </div>
+
+                <div class="form-error" id="register-error" role="alert" hidden></div>
+
+                <form id="register-form" novalidate>
+                    <div class="form-group">
+                        <label for="register-name">Full Name <span class="required">*</span></label>
+                        <input type="text" id="register-name" name="name" placeholder="e.g. Kannan G" required autocomplete="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="register-email" name="email" placeholder="name@example.com" required autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password">Password <span class="required">*</span></label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="register-password" name="password" placeholder="Minimum 6 characters" required autocomplete="new-password">
+                            <button type="button" class="password-toggle-btn" id="toggle-register-password" aria-label="Show password" aria-pressed="false" title="Show password">
+                                <span class="eye-icon" aria-hidden="true">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-confirm-password">Confirm Password <span class="required">*</span></label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="register-confirm-password" name="confirmPassword" placeholder="Re-type your password" required autocomplete="new-password">
+                            <button type="button" class="password-toggle-btn" id="toggle-register-confirm-password" aria-label="Show password" aria-pressed="false" title="Show password">
+                                <span class="eye-icon" aria-hidden="true">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="primary-button full-width" id="register-submit-btn">
+                        <span id="register-btn-text">Create Account →</span>
+                        <span id="register-btn-spinner" class="inline-spinner" hidden></span>
+                    </button>
+                </form>
+
+                <div class="auth-switch-note">
+                    Already have an account? <button type="button" class="text-link" id="switch-to-login">Sign in here</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
